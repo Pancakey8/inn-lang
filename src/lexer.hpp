@@ -27,6 +27,7 @@ enum class TokenType {
   Asterisk,
   Slash,
   Caret,
+  Ampersand,
 
   Comma,
   Equal,

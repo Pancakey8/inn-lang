@@ -10,7 +10,7 @@ std::unordered_map<Operator, int> precedences{
     {Operator::Less, 50},  {Operator::LessEq, 50},  {Operator::And, 30},
     {Operator::Or, 20},    {Operator::Not, 100},    {Operator::Pos, 90},
     {Operator::Neg, 90},   {Operator::Index, 110},  {Operator::FuncCall, 110},
-};
+    {Operator::Ref, 100}};
 
 std::unordered_map<TokenType, Operator> infix_ops{
     {TokenType::Plus, Operator::Add},
@@ -32,7 +32,7 @@ std::unordered_map<TokenType, Operator> prefix_ops{
     {TokenType::Plus, Operator::Pos},
     {TokenType::Minus, Operator::Neg},
     {TokenType::KwNot, Operator::Not},
-};
+    {TokenType::Ampersand, Operator::Ref}};
 
 std::unordered_map<TokenType, Operator> suffix_ops{
     {TokenType::SquareOpen, Operator::Index},
@@ -117,6 +117,10 @@ std::optional<Expr> ASTBuilder::parse_expression(int prec) {
 
 std::optional<Expr> ASTBuilder::right(Operator op, Expr left) {
   if (op == Operator::Index) {
+    if (accept(TokenType::SquareClose)) {
+      return std::optional<Expr>(ASTOperation{
+          Operator::Index, std::make_unique<Expr>(std::move(left)), nullptr});
+    }
     auto opt = parse_expression();
     expect_value(opt, "Expected index.");
     expect(TokenType::SquareClose, "Expected closing bracket.");
@@ -183,8 +187,13 @@ std::optional<Expr> ASTBuilder::left() {
 
 std::optional<ASTType> ASTBuilder::parse_type() {
   if (accept(TokenType::SquareOpen)) {
+    if (accept(TokenType::SquareClose)) {
+      expect(TokenType::Symbol, "Expected typename.");
+      std::string type = tokens[i - 1].lexeme;
+      return ASTType{type, -1};
+    }
     expect(TokenType::Int, "Expected positive integer array size.");
-    size_t arr_size = std::stoi(tokens[i - 1].lexeme);
+    int arr_size = std::stoi(tokens[i - 1].lexeme);
     if (arr_size <= 0)
       throw ASTError(tokens[i].loc, "Expected positive integer array size.");
     expect(TokenType::SquareClose, "Expected closing bracket.");

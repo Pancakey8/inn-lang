@@ -186,6 +186,9 @@ bool Tokenizer::try_operator() {
   case ',':
     add_token(TokenType::Comma, ",");
     break;
+  case '&':
+    add_token(TokenType::Ampersand, "&");
+    break;
   case '=':
     if (i + 1 < src.size() && src[i + 1] == '=') {
       add_token(TokenType::EqualEqual, "==");

@@ -1,8 +1,9 @@
 func main() void do
-  var numbers [3]int = [ 1, 2, 3 ]
-  var i int = 0
-  while i < 3 do
-    print(numbers[i])
-    i = i + 1
-  end
+  var name []char
+  var str [3]char = "Efe"
+  print(&str)
+  readline(name)
+  print(name[])
+  name[] = "Efe"
+  print(name[])
 end

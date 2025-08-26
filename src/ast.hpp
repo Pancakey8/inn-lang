@@ -42,6 +42,7 @@ enum class Operator {
   Not,
   Pos,
   Neg,
+  Ref,
   // Suffix
   Index,
   FuncCall // Cheaty bcus not held in ASTOperation
@@ -70,7 +71,7 @@ struct Expr {
 
 struct ASTType {
   std::string name;
-  size_t count; // 0 if not an array.
+  int count; // 0 if not an array, -1 if pointer
 };
 
 struct ASTVarDeclare {
