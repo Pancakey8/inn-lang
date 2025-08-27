@@ -100,8 +100,14 @@ struct ASTIf {
   std::vector<Statement> otherwise;
 };
 
+struct ASTReturn {
+  std::optional<Expr> what;
+};
+
+struct ASTBreak {};
+
 struct Statement {
-  std::variant<ASTVarDeclare, Expr, ASTWhile, ASTIf> value;
+  std::variant<ASTVarDeclare, Expr, ASTWhile, ASTIf, ASTBreak, ASTReturn> value;
 };
 
 using Paragraph = std::variant<Statement, ASTFuncDeclare>;
@@ -151,6 +157,10 @@ struct ASTBuilder {
   std::optional<ASTIf> parse_if();
 
   std::optional<ASTFuncDeclare> parse_funcdecl();
+
+  std::optional<ASTBreak> parse_break();
+
+  std::optional<ASTReturn> parse_return();
 
   std::optional<Statement> parse_statement();
 

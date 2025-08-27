@@ -339,6 +339,12 @@ std::optional<Statement> ASTBuilder::parse_statement() {
   if (auto opt = parse_if(); opt.has_value()) {
     return Statement{std::move(opt.value())};
   }
+  if (auto opt = parse_break(); opt.has_value()) {
+    return Statement{std::move(opt.value())};
+  }
+  if (auto opt = parse_return(); opt.has_value()) {
+    return Statement{std::move(opt.value())};
+  }
   if (auto opt = parse_expression(); opt.has_value()) {
     return Statement{std::move(opt.value())};
   }
@@ -460,6 +466,15 @@ void debug_print(ASTWhile &whl) {
   std::cout << "end" << std::endl;
 }
 
+void debug_print(ASTBreak &) { std::cout << "break" << std::endl; }
+
+void debug_print(ASTReturn &r) {
+  std::cout << "return ";
+  if (r.what.has_value())
+    debug_print(r.what.value());
+  std::cout << std::endl;
+}
+
 void debug_print(Statement &p) {
   std::visit([](auto &arg) { debug_print(arg); }, p.value);
 }
@@ -483,4 +498,21 @@ void debug_print(ASTFuncDeclare &fdecl) {
 
 void debug_print(Paragraph &p) {
   std::visit([](auto &arg) { debug_print(arg); }, p);
+}
+
+std::optional<ASTBreak> ASTBuilder::parse_break() {
+  if (!accept(TokenType::KwBreak))
+    return std::nullopt;
+  return ASTBreak{};
+}
+
+std::optional<ASTReturn> ASTBuilder::parse_return() {
+  if (!accept(TokenType::KwReturn))
+    return std::nullopt;
+  if (!stoppers.contains(tokens[i].type)) {
+    auto opt = parse_expression();
+    expect_value(opt, "Invalid expression near return");
+    return ASTReturn{std::move(opt)};
+  }
+  return ASTReturn{std::nullopt};
 }

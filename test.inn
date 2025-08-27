@@ -1,9 +1,9 @@
-func main() void do
-  var name []char
-  var str [3]char = "Efe"
-  print(&str)
-  readline(name)
-  print(name[])
-  name[] = "Efe"
-  print(name[])
+func main(argc int, argv []string) int do
+  var foo [3]int = [5,7,8]
+  var i int = 3
+  while i > 0 do
+    printf("%d\n", foo[3 - i])
+    i = i - 1
+  end
+  return 0
 end

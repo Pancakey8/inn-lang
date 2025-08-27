@@ -6,11 +6,12 @@
 #include <vector>
 
 static std::unordered_map<std::string, TokenType> keywords{
-    {"and", TokenType::KwAnd},     {"not", TokenType::KwNot},
-    {"or", TokenType::KwOr},       {"func", TokenType::KwFunc},
-    {"var", TokenType::KwVar},     {"if", TokenType::KwIf},
-    {"while", TokenType::KwWhile}, {"do", TokenType::KwDo},
-    {"end", TokenType::KwEnd},     {"else", TokenType::KwElse}};
+    {"and", TokenType::KwAnd},       {"not", TokenType::KwNot},
+    {"or", TokenType::KwOr},         {"func", TokenType::KwFunc},
+    {"var", TokenType::KwVar},       {"if", TokenType::KwIf},
+    {"while", TokenType::KwWhile},   {"do", TokenType::KwDo},
+    {"end", TokenType::KwEnd},       {"else", TokenType::KwElse},
+    {"return", TokenType::KwReturn}, {"break", TokenType::KwBreak}};
 
 bool is_symbol(char c) {
   return isalnum(c) || c == '_' || c == '!' || c == '?';

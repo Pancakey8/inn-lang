@@ -46,7 +46,9 @@ enum class TokenType {
   KwElse,
   KwWhile,
   KwDo,
-  KwEnd
+  KwEnd,
+  KwReturn,
+  KwBreak
 };
 
 struct LexerToken {
